@@ -1,5 +1,5 @@
 import os
-if os.path.exists('log'):
+if not os.path.exists('log'):
     os.makedirs('log')
 # 并行工作进程数
 workers = 4
