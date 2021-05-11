@@ -7,7 +7,7 @@ import unittest
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 
-sys.path.append('..')
+sys.path.append('.')
 from app.main.views import app
 from app.models import User, Version
 
