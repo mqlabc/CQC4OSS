@@ -1,3 +1,6 @@
+import os
+if os.path.exists('log'):
+    os.makedirs('log')
 # 并行工作进程数
 workers = 4
 # 指定每个工作者的线程数
