@@ -1,8 +1,12 @@
-import unittest
-from utils import UtilsTestCase
+import sys
 import os
+import unittest
+
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
+
+from utils import UtilsTestCase
+sys.path.append('../..')
 from app.models import User, Project
 from app.main.views import app
 

@@ -1,3 +1,4 @@
+import sys
 import os
 import shutil
 import stat
@@ -6,6 +7,7 @@ import unittest
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 
+sys.path.append('../..')
 from app.main.views import app
 from app.models import User, Version
 
@@ -69,6 +71,7 @@ class UtilsTestCase(unittest.TestCase):
     def get_versions(self, project_name):
         versions = Version.get_versions(project_name, self.mongo)
         return [version['version_name'] for version in versions]
+
 
 if __name__ == '__main__':
     unittest.main()

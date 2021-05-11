@@ -13,6 +13,8 @@ def run_cmd(cmd, re_pattern=None):
     # print('*' * 80)
     # print(f'path: {os.getcwd()}')
     # print(f'command: {cmd}')
+    if not sys.platform.startswith('win'):
+        cmd = cmd.replace('&', ';')
     print(f'\nrunning: {cmd}')
     code, stdout = getstatusoutput(cmd)
     # print('output:')
@@ -43,8 +45,9 @@ def get_tags_github(full_name):
     :param full_name: 项目全名
     :return: 按照committer date排序的版本号
     """
-    token = "e6e390e1e659c7fc921548752ee8932fcace2cb8"
-    headers = {'Authorization': f'token {token}'}
+    # token = "e6e390e1e659c7fc921548752ee8932fcace2cb8"
+    # headers = {'Authorization': f'token {token}'}
+    headers = {}
     version_time = []
     i = 1
     while True:
