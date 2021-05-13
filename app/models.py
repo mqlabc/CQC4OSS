@@ -54,6 +54,8 @@ class User:
         except SignatureExpired:
             # valid token, but expired
             return None
+        except TypeError:
+            return None
         except BadSignature:
             # invalid token
             return None

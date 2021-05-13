@@ -215,3 +215,4 @@ cython_debug/
 OSSprojects/
 OSSresults/
 ValidationResults/
+log
