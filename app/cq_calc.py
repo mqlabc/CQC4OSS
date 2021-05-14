@@ -1,6 +1,10 @@
-import pandas as pd
+"""
+代码质量指标计算库
+"""
 import xml.etree.ElementTree as ET
+
 import numpy
+import pandas as pd
 
 
 class Complexity:
@@ -311,7 +315,7 @@ class ISO25010:
 
 class Readability:
     """
-    论文中提到的归一化方法是什么？
+    暂时不使用论文中提到的归一化方法
     计算项目粒度的可读性: the less, the better
     Version、Class
     注意：不会包括所有的类，这些类的可读性为1
@@ -381,16 +385,16 @@ class RU2000:
 
         self.lcom = self.class_file['LCOM5']
         self.cohesion = ((-2.26852 * self.lcom) + 103.259) / 100
-        # ?什么归一化upper
+        # 归一化upper
         self.npm = self.value_normalize(self.class_file['NPM'])
         self.cloc_loc = self.class_file['LongName'].map(self.get_cloc_loc)
         self.ncm_nm = self.class_file['LongName'].map(self.get_ncm_nm)
         self.comments_in_definition_na_nm = self.class_file['LongName'].map(self.get_comments_in_definition_na_nm)
         # upper limit metrics
         self.na = self.value_normalize(self.class_file['NA'])
-        # ?什么归一化upper
+        # 归一化upper
         self.loc_m = self.value_normalize(self.class_file['LongName'].map(self.get_loc_m))
-        # ?什么归一化upper
+        # 归一化upper
         self.wmc = self.value_normalize(self.class_file['WMC'])
 
         # Modularity = 0.50 * Lack of Coupling + 0.50 * Cohesion
@@ -484,7 +488,7 @@ def cq_calculator(version_scan_results_directory, project_name):
     # 合并该版本的计算结果
     df = pd.concat([maintainability, testablility, readability, reusability, inheritance, complexity], axis=1)
     assert len(index) > 0, f'{version_scan_results_directory} has no classes'
-    # 空项目时可能不会成立
+    # 选择语言不对应，扫描结果为空时不会成立
     path0 = index[0]
     start_index = path0.find(project_name)
     df.index = [s[start_index:] for s in index]

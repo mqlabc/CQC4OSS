@@ -1,14 +1,19 @@
+"""
+Flask视图函数
+"""
+import json
+import os
+
 from flask import Flask, url_for, request, g
-from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_httpauth import HTTPBasicAuth
+from flask_pymongo import PyMongo
 from pymongo import MongoClient
-import json,os
 
-from ..visualize import to_treemap, to_linechart
-from ..models import User, Project, Version
 from ..errors import my_auth_error, api_message
+from ..models import User, Project, Version
 from ..utils import get_tags_github
+from ..visualize import to_treemap, to_linechart
 
 app = Flask(__name__)
 
@@ -23,8 +28,8 @@ if os.getenv('RUN'):
     app.config['SECRET_KEY'] = 'mql'
     app.config['mongo'] = mongo
     if not User.get_user('mql', app.config['mongo']):
-        user = User(user_name='mql', passwd_hash='python', mongo=app.config['mongo'])
-        user.save()
+        common_user = User(user_name='mql', passwd_hash='python', mongo=app.config['mongo'])
+        common_user.save()
 
 CORS(app, supports_credentials=True)
 auth = HTTPBasicAuth()

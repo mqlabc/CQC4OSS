@@ -1,7 +1,10 @@
-import sys
+"""
+权限验证功能测试用例
+"""
 import os
 import shutil
 import stat
+import sys
 import unittest
 
 from flask_pymongo import PyMongo
@@ -12,7 +15,7 @@ from app.main.views import app
 from app.models import User, Version
 
 
-def readonly_handler(func, path, execinfo):
+def readonly_handler(func, path):
     os.chmod(path, stat.S_IWRITE)
     func(path)
 

@@ -1,3 +1,6 @@
+"""
+可视化模块后端代码
+"""
 import pyecharts.options as opts
 from pyecharts.charts import TreeMap, Line, Grid
 
@@ -87,7 +90,7 @@ def to_linechart(data, proj):
                 )),
             legend_opts=opts.LegendOpts(
                 is_show=True, pos_top='middle', pos_left='1%', orient='vertical', padding=0),
-            datazoom_opts=opts.DataZoomOpts(type_='slider',range_start=0,range_end=100),
+            datazoom_opts=opts.DataZoomOpts(type_='slider', range_start=0, range_end=100),
             title_opts=opts.TitleOpts(title=f'Code Quality Linechart of {proj}', pos_left='center')
         )
     )

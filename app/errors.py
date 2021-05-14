@@ -1,3 +1,6 @@
+"""
+自定义http返回格式
+"""
 from werkzeug.http import HTTP_STATUS_CODES
 
 

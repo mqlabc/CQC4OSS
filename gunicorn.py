@@ -1,4 +1,8 @@
+"""
+运行gunicorn所需的配置文件
+"""
 import os
+
 if not os.path.exists('log'):
     os.makedirs('log')
 # 并行工作进程数

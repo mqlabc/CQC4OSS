@@ -1,8 +1,13 @@
+"""
+通过计算指标与代码度量相关性进行方案验证
+"""
+import os
 import openpyxl
 import pandas as pd
-from app.utils import CodeScanner
-from app.models import Project, Version
+from flask_pymongo import PyMongo
+
 from app.cq_calc import ISO25010, RU2000, Readability, Complexity, Inheritance
+from app.models import Project, Version
 
 
 def remove_dup(series):
@@ -83,6 +88,8 @@ def cq_validator(version_scan_results_directory, project_name):
 
 
 if __name__ == '__main__':
+    mongodb_url = os.getenv('MONGODB_URL')
+    mongo = PyMongo('', uri=f'{mongodb_url}/run')
     project = Project('alibaba/metrics', '', '')
     version = Version(project, 't1', '', '', '')
     # cs = CodeScanner(version)

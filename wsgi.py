@@ -1,3 +1,6 @@
+"""
+导入app实例，用于启动gunicorn服务
+"""
 import os
 
 from dotenv import load_dotenv

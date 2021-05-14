@@ -1,8 +1,9 @@
 """
-# My MongoDB ORM
+# My Simple MongoDB ORM: User, Project, Version
 """
 from flask_pymongo import PyMongo
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
+
 from .utils import CodeManager, CodeScanner, IndicatorsCalculator, get_tags_local, get_last_commit_local
 
 
@@ -146,7 +147,7 @@ class Project:
         data = dict(self)
         data['owners_list'] = self.owners_list
         self.mongo.db.projects.insert_one(data)
-        # 对于versions_list, insert_many?
+        # 对于versions_list, insert_many
         version_values = [{'project_name': self.project_name,
                            'version_name': version['version_name'],
                            'scanned': False,
@@ -250,8 +251,9 @@ class Version:
         return versions_list
 
     def scan(self):
-        # 在project的的时候就存到mongodb？后面只需要去更新字段？
+        # 实例化CodeScanner
         cs = CodeScanner(self)
+        # 切换到本实例对应的版本
         cs.checkout()
         cs.scan()
         myquery = {'project_name': self.project_name, 'version_name': self.version_name}
@@ -260,7 +262,7 @@ class Version:
         return True
 
     def calc(self):
-        # 在project的的时候就存到mongodb？后面只需要去更新字段？
+        # 在project的时候，version就存到mongodb，有计算结果之后只需要更新字段
         ci = IndicatorsCalculator(self)
         indicators = ci.calc_indicators()
         myquery = {'project_name': self.project_name, 'version_name': self.version_name}

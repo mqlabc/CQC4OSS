@@ -1,15 +1,19 @@
-import re
+"""
+供其他模块调用的工具函数和工具类
+"""
+import datetime
+import json
 import os
 import sys
-import json
 import time
-import datetime
-import requests
-from .cq_calc import cq_calculator
 from subprocess import getstatusoutput
 
+import requests
 
-def run_cmd(cmd, re_pattern=None):
+from .cq_calc import cq_calculator
+
+
+def run_cmd(cmd):
     # print('*' * 80)
     # print(f'path: {os.getcwd()}')
     # print(f'command: {cmd}')
@@ -208,7 +212,7 @@ def find_children(parent_path, whole_set):
     return f
 
 
-# 开始计算，是否可以参考胡正华老师的做法改成迭代计算？
+# 递归地将类粒度指标累加为各粒度指标
 def convert(target, proj_path, whole_set, fine_grained_dict):
     maintainability, testability, readability, reusability, inheritance, complexity = 0, 0, 0, 0, 0, 0
     for path in find_children(proj_path, whole_set):
