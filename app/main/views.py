@@ -304,5 +304,14 @@ def get_versions(project_name):
     return api_message(200, code=1000, data=data)
 
 
+# 获取某个demo项目的version信息
+@app.route('/api/demo_versions/<path:project_name>', methods=['GET'])
+def get_demo_versions(project_name):
+    # project_name = request.json.get('project_name')
+    # 通过user来选择可以获取的列表，通过jsonify才可以正常返回
+    data = {'versions_list': Version.get_versions(project_name, app.config['mongo'])}
+    return api_message(200, code=1000, data=data)
+
+
 if __name__ == '__main__':
     app.run()
