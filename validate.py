@@ -1,17 +1,27 @@
 """
-通过计算指标与代码度量相关性进行方案验证
+以可维护性为例，通过计算指标与代码度量的Spearman相关系数进行方案验证
 """
-import os
 import openpyxl
 import pandas as pd
-from flask_pymongo import PyMongo
 
 from app.cq_calc import ISO25010, RU2000, Readability, Complexity, Inheritance
 from app.models import Project, Version
+from app.utils import CodeScanner
+from scipy import stats
 
 
+# 删除df中的重复项
 def remove_dup(series):
     return series[~series.index.duplicated()]
+
+
+def calc_corr(indicator_name, v_df):
+    result = pd.DataFrame({'Spearman rank-order correlation coefficient': [], 'P-value': []})
+    for col_name in ['LOC', 'SIZE2', 'NLM', 'NOC', 'WMC', 'RFC', 'DIT', 'CBO', 'NOI', 'NII', 'LCOM5']:
+        coefficient, pvalue = stats.spearmanr(v_df[indicator_name], v_df[col_name])
+        result = result.append(
+            pd.Series({'Spearman rank-order correlation coefficient': coefficient, 'P-value': pvalue}, name=col_name))
+    return result
 
 
 def add_sheet(data, excel_writer, sheet_name):
@@ -33,7 +43,7 @@ def add_sheet(data, excel_writer, sheet_name):
     excel_writer.close()
 
 
-def cq_validator(version_scan_results_directory, project_name):
+def cq_validate(version_scan_results_directory, project_name):
     params = [version_scan_results_directory, project_name]
     complexity_calculator = Complexity(*params)
     complexity, index = complexity_calculator.complexity, complexity_calculator.index
@@ -83,15 +93,13 @@ def cq_validator(version_scan_results_directory, project_name):
     df.to_excel(f'./ValidationResults/{project_name}.xlsx', sheet_name='code quality and metrics')
 
     excel_writer = pd.ExcelWriter(f'./ValidationResults/{project_name}.xlsx', engine='openpyxl')
-    add_sheet(df.corr(method='spearman'), excel_writer, 'relativity')
+    add_sheet(calc_corr('maintainability', df), excel_writer, 'maintainability')
     return df
 
 
 if __name__ == '__main__':
-    mongodb_url = os.getenv('MONGODB_URL')
-    mongo = PyMongo('', uri=f'{mongodb_url}/run')
-    project = Project('alibaba/metrics', '', '')
-    version = Version(project, 't1', '', '', '')
-    # cs = CodeScanner(version)
-    # cs.scan()
-    cq_validator(version.version_scan_results_dir, 'metrics')
+    project = Project('alibaba/metrics', '', 'mongo')
+    version = Version(project, 'metrics-2.0.6', '', '', '')
+    cs = CodeScanner(version)
+    cs.scan()
+    cq_validate(version.version_scan_results_dir, 'metrics')

@@ -31,16 +31,17 @@ class Inheritance:
     def __init__(self, directory, name):
         self.dir = directory
         self.class_file = pd.read_csv(f'{directory}/{name}-Class.csv').set_index('LongName', drop=False)
-        self.noa = self.class_file['NOA']
-        self.noc = self.class_file['NOC']
-        self.nop = self.class_file['NOP']
-        self.nod = self.class_file['NOD']
+        # self.noa = self.class_file['NOA']
+        # self.noc = self.class_file['NOC']
+        # self.nop = self.class_file['NOP']
+        # self.nod = self.class_file['NOD']
         self.dit = self.class_file['DIT']
         self.inheritance = self.get_inherirance()
         self.inheritance.name = 'inheritance'
 
     def get_inherirance(self):
-        return (self.noa + self.noc + self.nop + self.nod + self.dit) / 5
+        # return (self.noa + self.noc + self.nop + self.nod + self.dit) / 5
+        return self.dit
 
 
 class ISO25010:
