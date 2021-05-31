@@ -89,6 +89,7 @@ def get_tags_local(full_name):
         if not version_name.startswith('tag: '):
             version_name_ = [s for s in line.split(', ') if s.startswith('tag: ')]
             if len(version_name_) > 0:
+                version_name_ = [s for s in version_name_[0].split(',') if s.startswith('tag: ')]
                 version_name = version_name_[0]
         if len(version_name) == 0:
             continue
@@ -343,4 +344,5 @@ if __name__ == '__main__':
     # cs = CodeScanner(version)
     # cs.checkout()
     # cs.scan()
+    get_tags_local('alibaba/cooma')
     pass
